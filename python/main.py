@@ -1,0 +1,1 @@
+# O ponto de entrada único do sistema. É o script que o utilizador executa no terminal para interagir com a aplicação.

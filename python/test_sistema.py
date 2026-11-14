@@ -1,0 +1,1 @@
+# Arquivo de testes automatizados usando unittest ou pytest (exigido no edital).

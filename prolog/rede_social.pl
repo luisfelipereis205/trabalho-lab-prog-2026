@@ -1,0 +1,1 @@
+/* O arquivo principal em Prolog que vai conter a base de conhecimento (fatos de amizade), as regras de inferência de conexões indiretas e o predicado findall/3 para gerar as sugestões. */

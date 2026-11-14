@@ -1,0 +1,1 @@
+# O módulo responsável por ler os dados, empacotar em JSON, chamar os processos externos do Prolog e do Lisp, e tratar os erros de fronteira

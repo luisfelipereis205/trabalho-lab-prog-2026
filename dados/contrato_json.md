@@ -1,0 +1,1 @@
+<!-- Um pequeno documento explicando o formato exato dos JSONs trocados entre o Python, o Prolog e o Lisp, para o relatório -->
