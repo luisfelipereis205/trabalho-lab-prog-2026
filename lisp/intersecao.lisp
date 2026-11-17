@@ -1,8 +1,6 @@
-#| O script em Common Lisp contendo funções puras sem efeitos colaterais para calcular a interseção de listas de amigos usando recursão, map, reduce ou filter. |#
-;;;; ==========================================================================
+#| O script em Common Lisp contendo funções puras para calcular a interseção de listas de amigos usando recursão, map, reduce ou filter. 
 ;;;; MÓDULO FUNCIONAL - COMMON LISP (SBCL)
 ;;;; Projeto Integrado: Análise e Recomendação de Conexões em Redes Sociais
-;;;; ==========================================================================
 
 ;;; 1. Verifica recursivamente se um elemento pertence a uma lista (Função Pura)
 (defun pertence-p (elemento lista)
