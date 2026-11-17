@@ -58,8 +58,9 @@ class OrquestradorMultiparadigma:
         str_amigos_a = ",".join(amigos_a)
         str_amigos_b = ",".join(amigos_b)
 
+        # Usando o caminho completo do executável no Windows para evitar o erro de PATH
         cmd = [
-            "sbcl",
+            r"C:\Program Files\Steel Bank Common Lisp\sbcl.exe",
             "--script",
             str(self.arquivo_lisp),
             origem.lower().strip(),
@@ -69,13 +70,15 @@ class OrquestradorMultiparadigma:
         ]
 
         try:
-            res = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            res = subprocess.run(
+                cmd, capture_output=True, text=True, encoding="utf-8", check=True
+            )
             # Pega a última linha não vazia (onde o JSON é impresso)
             linhas = [l.strip() for l in res.stdout.splitlines() if l.strip()]
             if not linhas:
                 raise RuntimeError("O script Lisp não retornou saída.")
             return json.loads(linhas[-1])
         except FileNotFoundError:
-            raise RuntimeError("SBCL ('sbcl') não encontrado no PATH do sistema.")
+            raise RuntimeError("SBCL ('sbcl.exe') não encontrado no caminho especificado.")
         except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
             raise RuntimeError(f"Erro ao integrar com Common Lisp: {e}")

@@ -1,6 +1,10 @@
-#| O script em Common Lisp contendo funções puras para calcular a interseção de listas de amigos usando recursão, map, reduce ou filter. 
 ;;;; MÓDULO FUNCIONAL - COMMON LISP (SBCL)
 ;;;; Projeto Integrado: Análise e Recomendação de Conexões em Redes Sociais
+
+(require :uiop)
+
+;; Força a codificação UTF-8 para evitar erros de carateres no Windows
+#+sb-unicode (setf sb-impl::*default-external-format* :utf-8)
 
 ;;; 1. Verifica recursivamente se um elemento pertence a uma lista (Função Pura)
 (defun pertence-p (elemento lista)
@@ -63,15 +67,14 @@
 (defun main ()
   (let ((args (cdr sb-ext:*posix-argv*)))
     (if (>= (length args) 4)
-        ;; Quando chamado pelo Python:
-        ;; sbcl --script lisp/intersecao.lisp "ana" "daniela" "bruno,carlos" "bruno,gabriel"
+        ;; Quando chamado pelo Python
         (let ((origem (nth 0 args))
               (candidato (nth 1 args))
               (amigos-a (uiop:split-string (nth 2 args) :separator ","))
               (amigos-b (uiop:split-string (nth 3 args) :separator ",")))
           (format t "~a~%" (gerar-resposta-json origem candidato amigos-a amigos-b)))
         
-        ;; Quando rodado sem argumentos (teste local ou no navegador):
+        ;; Quando rodado sem argumentos (teste local)
         (let ((amigos-ana '("bruno" "carlos" "eduardo"))
               (amigos-daniela '("bruno" "gabriel" "eduardo")))
           (format t "~a~%" (gerar-resposta-json "ana" "daniela" amigos-ana amigos-daniela))))))
