@@ -9,6 +9,8 @@ class OrquestradorMultiparadigma:
     # A classe OrquestradorMultiparadigma é responsável por orquestrar a integração entre o Python, Prolog e Lisp. Ela fornece métodos para consultar sugestões de conexões e caminhos entre usuários usando Prolog, bem como calcular afinidade entre usuários usando Lisp. A classe também lida com erros de fronteira, como a ausência dos interpretadores necessários no PATH do sistema.
 
     def __init__(self, raiz_projeto: str | Path):
+        # Resolve o caminho absoluto da raiz para localizar os scripts de cada paradigma
+        # independentemente de onde o comando seja executado no terminal.
         self.raiz = Path(raiz_projeto).resolve()
         self.arquivo_prolog = self.raiz / "prolog" / "rede_social.pl"
         self.arquivo_lisp = self.raiz / "lisp" / "intersecao.lisp"

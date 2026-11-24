@@ -20,9 +20,10 @@ def exibir_menu() -> None:
 
 
 def main() -> None:
+    # Aqui o Python assume o papel de orquestrador e ponto de entrada único do sistema. Ele resolve o caminho do projeto de forma portável (Path), instancia o modelo orientado a objetos (RedeSocial) carregando a base fictícia em JSON com os registros de usuários e prepara o OrquestradorMultiparadigma que fará a ponte com Prolog e Lisp.
     raiz = Path(__file__).resolve().parent.parent
     rede = RedeSocial(raiz / "dados" / "usuarios.json")
-    orquestrador = OrquestradorMultiparadigma(raiz)
+    orquestrador = OrquestradorMultiparadigma(raiz) 
 
     while True:
         exibir_menu()
@@ -89,6 +90,7 @@ def main() -> None:
                         usuario.nome, cand_nome, usuario.amigos, amigos_cand
                     )
                     resultados_ranqueados.append(analise)
+                    # mostrar a integração real entre os três paradigmas. Primeiro o Python pede ao Prolog (consultar_sugestoes_prolog) para inferir quem são os candidatos a conexão (amigos de amigos) usando lógica. Depois, para cada candidato, o Python busca os amigos no objeto e chama o Common Lisp (calcular_afinidade_lisp) para calcular a interseção e o coeficiente de Jaccard de forma funcional, devolvendo o resultado para o Python ordenar e exibir.
 
                 # Ordena pela maior afinidade calculada pelo Lisp
                 resultados_ranqueados.sort(key=lambda x: x["afinidade"], reverse=True)
