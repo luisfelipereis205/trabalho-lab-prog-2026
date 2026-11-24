@@ -1,19 +1,20 @@
 # O ponto de entrada único do sistema. É o script que o utilizador executa no terminal para interagir com a aplicação.
 
 from pathlib import Path
+import json
 from models import RedeSocial
 from orchestrator import OrquestradorMultiparadigma
 
 
 def exibir_menu() -> None:
-    print("\n" + "=" * 55)
-    print("   REDE SOCIAL MULTIPARADIGMA (Python + Prolog + Lisp)")
-    print("=" * 55)
-    print("1. Listar usuários cadastrados (JSON / POO)")
+    
+    print("      REDE SOCIAL MULTIPARADIGM - MENU PRINCIPAL")
+    print("-" * 55)
+    print("1. Listar usuários cadastrados")
     print("2. Consultar perfil de um usuário")
-    print("3. Sugerir conexões + Afinidade (Prolog + Common Lisp)")
-    print("4. Calcular grau de separação / caminho (Prolog)")
-    print("5. Comparar afinidade direta entre dois usuários (Common Lisp)")
+    print("3. Sugerir conexões + Afinidade")
+    print("4. Calcular grau de separação / caminho")
+    print("5. Comparar afinidade direta entre dois usuários")
     print("0. Sair")
     print("-" * 55)
 
@@ -28,13 +29,31 @@ def main() -> None:
         opcao = input("Escolha uma opção: ").strip()
 
         if opcao == "1":
-            usuarios = rede.listar_todos()
-            print(f"\nTotal de usuários carregados: {len(usuarios)}")
-            for u in usuarios[:15]:
-                print(f"  [{u.id:02d}] {u.nome.capitalize()} | Amigos: {', '.join(u.amigos)}")
-            if len(usuarios) > 15:
-                print("  ... (mostrando os 15 primeiros)")
-
+            print("\n--- LISTA DE USUÁRIOS (50 Registros) ---")
+            try:
+                # Usa diretamente o método da classe RedeSocial para obter a lista de utilizadores
+                # (Se o teu método se chamar diferente, adaptamos, mas 'rede.usuarios' ou 'rede.obter_usuarios()' é o padrão)
+                usuarios = list(rede.usuarios.values()) if isinstance(rede.usuarios, dict) else rede.usuarios
+                
+                total = len(usuarios)
+                bloco = 15
+                
+                for i in range(0, total, bloco):
+                    sublote = usuarios[i:i + bloco]
+                    for idx, u in enumerate(sublote, start=i + 1):
+                        # Extrai o nome independentemente de ser objeto ou dicionário
+                        nome = getattr(u, 'nome', None) or (u.get('nome') if isinstance(u, dict) else str(u))
+                        print(f"{idx}. {nome.capitalize()}")
+                    
+                    if i + bloco < total:
+                        continuar = input("\nPressiona [Enter] para ver mais ou 'q' para voltar ao menu: ").strip().lower()
+                        if continuar == 'q':
+                            break
+            except Exception as e:
+                print(f"Erro ao listar utilizadores: {e}")
+            
+            print("\n----------------------------------------")
+        
         elif opcao == "2":
             nome = input("Digite o nome do usuário: ").strip()
             usuario = rede.buscar_usuario(nome)
@@ -42,8 +61,8 @@ def main() -> None:
                 print("Usuário não encontrado.")
             else:
                 print(f"\nPerfil de {usuario.nome.capitalize()} (ID: {usuario.id}):")
-                print(f"  Amigos diretos : {', '.join(usuario.amigos) or 'Nenhum'}")
-                print(f"  Interesses     : {', '.join(usuario.interesses) or 'Nenhum'}")
+                print(f"   Amigos diretos : {', '.join(usuario.amigos) or 'Nenhum'}")
+                print(f"   Interesses     : {', '.join(usuario.interesses) or 'Nenhum'}")
 
         elif opcao == "3":
             nome = input("Gerar recomendações para qual usuário? (ex: ana): ").strip()
@@ -90,7 +109,7 @@ def main() -> None:
             try:
                 caminho = orquestrador.consultar_caminho_prolog(origem, destino)
                 if caminho:
-                    graus = len(caminho) - 1
+                    graus = len(caminho) - 1  # Grau de separação (arestas)
                     rota = " -> ".join(p.capitalize() for p in caminho)
                     print(f"\nCaminho encontrado ({graus} grau(s) de separação):")
                     print(f"  {rota}")
@@ -114,9 +133,9 @@ def main() -> None:
                     user_a.nome, user_b.nome, user_a.amigos, user_b.amigos
                 )
                 print("\nResultado retornado pelo Common Lisp:")
-                print(f"  Amigos em comum : {analise['amigos_em_comum']}")
-                print(f"  Total em comum  : {analise['total_em_comum']}")
-                print(f"  Afinidade       : {analise['afinidade']:.2f}")
+                print(f"   Amigos em comum : {analise['amigos_em_comum']}")
+                print(f"   Total em comum  : {analise['total_em_comum']}")
+                print(f"   Afinidade       : {analise['afinidade']:.2f}")
             except RuntimeError as erro:
                 print(f"\n[Erro de Integração] {erro}")
 
